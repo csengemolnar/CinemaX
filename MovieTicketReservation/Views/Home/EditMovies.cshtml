@@ -1,0 +1,45 @@
+﻿@model List<Movies>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+<div class="text-center">
+    <h1 class="display-4">Edit Movies</h1>
+</div>
+<p>
+    @Html.ActionLink("Create New Movie", "AddMovies")
+</p>
+
+@foreach (var movie in Model)
+{
+    <div>
+        <div><img src="@Url.Content("~/" + movie.ThumbNail)" alt="Movie Thumbnail" /></div>
+        <div>@movie.Title</div>
+        <div>@movie.Actors</div>
+        <div>@movie.Genre</div>
+        <div>@movie.MovieLength</div>
+        <div>@movie.Genre</div>
+        <div>@movie.Director</div>
+        <div>@movie.Description</div>
+
+        <div class="row">
+            <div class="col">
+                <!-- Content on the left side -->
+            </div>
+            <div class="col-auto">
+                <div class="btn-group ml-auto">
+                    <div class="buttons">@Html.ActionLink("Edit", "Edit", new{id=movie.MovieId}, new{@class = "btn btn-primary", @style="color:white;margin-right: 10px"})</div>
+                    <div>@Html.ActionLink("Delete", "Delete", new{id=movie.MovieId}, new{@class = "btn btn-danger", @style="color:white"})</div>
+                </div>
+            </div>
+        </div>
+
+        
+        
+        
+
+    </div>
+    <hr />
+
+}

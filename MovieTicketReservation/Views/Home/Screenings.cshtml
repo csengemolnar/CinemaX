@@ -1,0 +1,29 @@
+﻿@model MovieTicketReservation.Models.ScreeningsViewModel
+
+@{
+    ViewData["Title"] = "Movie Shows";
+
+}
+
+<div class="text-center">
+    <h1 class="display-4">CinemaX </h1>
+    <h2>Get rich with an experience</h2>
+</div>
+<div>
+    <h2>@Model.Movie.Title Screenings</h2>
+</div>
+
+<div class ="text-center"><img src="@Url.Content("~/" + Model.Movie.ThumbNail)" alt="Movie Thumbnail" /></div>
+
+@foreach (var movieshows in Model.MovieShows)
+{
+    <div>
+        <div>Date: @movieshows.Date.ToString("yyyy-MM-dd") </div>
+        <div>Hall: @movieshows.HallId</div>
+        <div>Start of the Movie: @movieshows.Start.ToString("HH:mm")</div>
+       </div>
+       
+    <hr />
+
+}
+

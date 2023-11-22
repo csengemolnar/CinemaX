@@ -1,0 +1,49 @@
+﻿@model List<Movies>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+
+
+<div>
+    <div><img src="@Url.Content("~/ThumbNails/cnm.jpg")" class="img-fluid" alt="Cinema logo" style="object-fit: cover" /></div>
+</div>
+<div>
+    <h3>List of Movies</h3>
+</div>
+
+@foreach (var movie in Model)
+{
+    <div>
+        <script>
+            console.log("Generated Image Path: @Url.Content("~/" + movie.ThumbNail)");
+        </script>
+
+
+        <div><img src="@Url.Content("~/" + movie.ThumbNail)" alt="Movie Thumbnail" /></div>
+        <div>@movie.Title</div>
+        <div>@movie.MovieLength mins</div>
+        <div>Genre: @movie.Genre</div>
+        <div>Stars: @movie.Actors</div>
+        <div> Release date: @movie.ReleaseDate.ToString("yyyy-MM-dd") </div>
+        <div>Director: @movie.Director</div>
+        <div>@movie.Description</div>
+
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-auto">
+                <div>@Html.ActionLink("Screenings", "Screenings", new{movieId=movie.MovieId}, new{@class = "btn btn-warning", @style="color:white"})</div>
+
+            </div>
+        </div>
+
+    </div>
+    <hr />
+
+}
+
+
