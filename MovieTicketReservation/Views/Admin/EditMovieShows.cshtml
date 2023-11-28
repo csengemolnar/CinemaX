@@ -1,0 +1,35 @@
+﻿@model List<MovieTicketReservation.Models.MovieAndScreeningsViewModel>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<div class="text-center">
+    <h1 class="display-4">Edit Movies</h1>
+</div>
+<p>
+    @Html.ActionLink("Create New Screening", "AddShows")
+</p>
+
+@foreach (var item in Model)
+{
+    <div>
+        <div>@item.MovieTitle</div>
+        <div>@item.ShowDate.ToString("yyyy-MM-dd HH:mm")</div>
+        <div>Hall: @item.Hall</div>
+        
+        <div class="row">
+            <div class="col">
+                <!-- Content on the left side -->
+            </div>
+            <div class="col-auto">
+                <div class="btn-group ml-auto">
+                    <div class="buttons">@Html.ActionLink("Edit", "EditShows", new{id=item.MovieShowId}, new{@class = "btn btn-primary", @style="color:white;margin-right: 10px"})</div>
+                    <div>@Html.ActionLink("Delete", "DeleteShows", new{id=item.MovieShowId}, new{@class = "btn btn-danger", @style="color:white"})</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <hr />
+
+}

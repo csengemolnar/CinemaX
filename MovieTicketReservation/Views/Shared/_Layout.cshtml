@@ -1,12 +1,15 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MovieTicketReservation</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/test.styles.css" asp-append-version="true" />
+
+    
 </head>
 <body>
     <header>
@@ -22,14 +25,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                   
 
                         @if (User.IsInRole("User"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MyReservations">My Reservations</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="MyReservations">My Reservations</a>
                             </li>
                             
 
@@ -37,10 +38,10 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="EditMovies">Edit Movies</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="EditMovies">Edit Movies</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="EditMovieShows">Edit Shows</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="EditMovieShows">Edit Shows</a>
                             </li>
                             
                             
@@ -51,6 +52,9 @@
                 </div>
             </div>
         </nav>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="background-color:black!important">
+            <img src="@Url.Content("~/ThumbNails/cnm.jpg")" class="logo" alt="Cinema logo" />
+            </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -60,7 +64,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - MovieTicketReservation - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - MovieTicketReservation -
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

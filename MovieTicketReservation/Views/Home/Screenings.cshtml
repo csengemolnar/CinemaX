@@ -5,25 +5,80 @@
 
 }
 
-<div class="text-center">
-    <h1 class="display-4">CinemaX </h1>
-    <h2>Get rich with an experience</h2>
-</div>
+
+
 <div>
     <h2>@Model.Movie.Title Screenings</h2>
 </div>
 
 <div class ="text-center"><img src="@Url.Content("~/" + Model.Movie.ThumbNail)" alt="Movie Thumbnail" /></div>
 
+
+<br/>
+<div class="text-center">
+    <label>Search Date</label>
+    <input id="filterdate" type="date" class="datepicker"/>
+    <button id="filterButton" class="btn btn-primary">Filter</button>
+</div>
+
 @foreach (var movieshows in Model.MovieShows)
 {
-    <div>
-        <div>Date: @movieshows.Date.ToString("yyyy-MM-dd") </div>
+    <div class="movieshow">
+        <div class ="showDate">Date: @movieshows.Start.ToString("yyyy-MM-dd") </div>
         <div>Hall: @movieshows.HallId</div>
         <div>Start of the Movie: @movieshows.Start.ToString("HH:mm")</div>
-       </div>
-       
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-auto">
+                    <div>@Html.ActionLink("Reservation", "Reservation", new{moviesShowId=movieshows.MovieId}, new{@class = "btn btn-warning", @style="color:black"})</div>
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-auto">
+                    <a href="/Identity/Account/Login" >Login to make a Reservation</a>
+                </div>
+            </div>
+            
+        }
+
+
+    </div>
+    
     <hr />
+
+
 
 }
 
+
+<script>
+
+
+    $(document).ready(function () {
+        $('#filterButton').click(function () {
+            var selectedDate = $('#filterdate').val();
+            $('.movieshow').each(function () {
+                var showDate = $(this).find('.showDate').text().split(' ')[1];
+                if (showDate === selectedDate) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">

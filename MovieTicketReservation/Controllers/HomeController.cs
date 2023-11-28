@@ -57,54 +57,7 @@ namespace MovieTicketReservation.Controllers
             return View("Screenings", viewModel);
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult EditMovies()
-        {
-            return View(moviecontext.Movies.ToList());
-        }
-        [HttpGet]
-        [Authorize(Roles="Admin")]
-        public IActionResult AddMovies()
-        {
-           
-            
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles="Admin")]
-        public IActionResult AddMovies(Movies movies)
-        {
-            moviecontext.Movies.Add(movies);
-            moviecontext.SaveChanges();
-            return RedirectToAction("EditMovies");
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Edit(int id)
-        {
-            var movie = moviecontext.Movies.Find(id);
-            return View("Edit", movie);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Edit(Movies movie)
-        {
-            moviecontext.Entry(movie).State = EntityState.Modified;
-            moviecontext.SaveChanges();
-            return RedirectToAction("EditMovies");
-        }
-
-        [Authorize(Roles = "Admin")]
-        public IActionResult Delete(int id)
-        {
-            var movie = moviecontext.Movies.Find(id);
-            moviecontext.Movies.Remove(movie);
-            moviecontext.SaveChanges();
-            return RedirectToAction("EditMovies");
-        }
+       
 
 
 

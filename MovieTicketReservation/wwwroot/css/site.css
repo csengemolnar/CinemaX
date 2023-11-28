@@ -20,3 +20,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+img.logo {
+    width: 60%;
+    margin: 0 auto;
+    display: block;
+    z-index: 100000;
+}
