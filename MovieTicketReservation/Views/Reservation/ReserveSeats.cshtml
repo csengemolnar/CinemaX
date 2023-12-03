@@ -1,0 +1,41 @@
+﻿@model MovieTicketReservation.ViewModels.ReserveSeatsViewModel
+
+<h2>@Model.MovieShowStart</h2>
+<h3>Hall: @Model.ReservationId</h3>
+
+<form asp-action="MakeReservation" method="post">
+    <div id="seating-layout">
+        @*@for (int row = 1; row <= Model.Rows; row++)
+        {
+            <div class="seat-row">
+                @foreach (var seat in Model.Seats.Where(s => s.Row == row))
+                {
+                    <button type="button" class="seat @(seat.IsReserved ? "reserved" : "available")"
+                            data-seatid="@seat.SeatId" @(seat.IsReserved ? "disabled" : "")>
+                        @seat.Row-@seat.SeatNumber
+                    </button>
+                }
+            </div>
+        }*@
+    </div>
+
+    <input type="hidden" name="SelectedSeats" id="SelectedSeats" />
+    <button type="submit">Reserve Selected Seats</button>
+</form>
+
+<script>
+    document.querySelectorAll('.seat.available').forEach(function (seat) {
+        seat.addEventListener('click', function () {
+            this.classList.toggle('selected');
+            updateSelectedSeats();
+        });
+    });
+
+    function updateSelectedSeats() {
+        var selectedSeats = [];
+        document.querySelectorAll('.seat.selected').forEach(function (seat) {
+            selectedSeats.push(seat.getAttribute('data-seatid'));
+        });
+        document.getElementById('SelectedSeats').value = selectedSeats.join(',');
+    }
+</script>

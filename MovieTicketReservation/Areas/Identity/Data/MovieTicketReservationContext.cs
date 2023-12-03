@@ -13,7 +13,6 @@ public class MovieTicketReservationContext : IdentityDbContext<IdentityUser>
     public DbSet<Movies> Movies { get; set; }
     public DbSet<Reservations> Reservations { get; set; }
     public DbSet<SeatReservations> SeatReservations { get; set; }
-    public DbSet<Seats> Seats { get; set; }
     
 
     public MovieTicketReservationContext(DbContextOptions<MovieTicketReservationContext> options)

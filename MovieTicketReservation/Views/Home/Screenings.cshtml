@@ -1,4 +1,4 @@
-﻿@model MovieTicketReservation.Models.ScreeningsViewModel
+﻿@model MovieTicketReservation.ViewModels.ScreeningsViewModel
 
 @{
     ViewData["Title"] = "Movie Shows";
@@ -33,7 +33,8 @@
             <div class="row">
                 <div class="col"></div>
                 <div class="col-auto">
-                    <div>@Html.ActionLink("Reservation", "Reservation", new{moviesShowId=movieshows.MovieId}, new{@class = "btn btn-warning", @style="color:black"})</div>
+                    <div> @Html.ActionLink("Reservation", "ReserveSeats", "Reservation", new { movieShowId = movieshows.MovieShowId }, new { @class = "btn btn-warning", @style = "color:black" })</div>
+
 
                 </div>
             </div>

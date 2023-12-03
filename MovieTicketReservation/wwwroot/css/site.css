@@ -26,3 +26,7 @@ img.logo {
     display: block;
     z-index: 100000;
 }
+
+.spacing-right {
+    margin-right: 30px;
+}

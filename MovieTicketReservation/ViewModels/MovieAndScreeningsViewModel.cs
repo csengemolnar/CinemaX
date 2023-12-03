@@ -1,4 +1,4 @@
-﻿namespace MovieTicketReservation.Models
+﻿namespace MovieTicketReservation.ViewModels
 {
     public class MovieAndScreeningsViewModel
     {

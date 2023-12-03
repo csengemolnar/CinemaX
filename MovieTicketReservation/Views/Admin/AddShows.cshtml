@@ -1,7 +1,8 @@
-﻿@model MovieTicketReservation.Models.MovieShows
+﻿@model MovieTicketReservation.ViewModels.EditShowsAndDisplayMoviesViewModel
 
 @{
     ViewData["Title"] = "AddShows";
+    
 }
 
 <h1>AddShows</h1>
@@ -13,29 +14,70 @@
         <form asp-action="AddShows">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <label asp-for="MovieShows.Date" class="control-label"></label>
+                <input asp-for="MovieShows.Date" class="form-control" />
+                <span asp-validation-for="MovieShows.Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HallId" class="control-label"></label>
-                <input asp-for="HallId" class="form-control" />
-                <span asp-validation-for="HallId" class="text-danger"></span>
+                <label asp-for="MovieShows.HallId" class="control-label"></label>
+                <input asp-for="MovieShows.HallId" class="form-control" />
+                <span asp-validation-for="MovieShows.HallId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MovieId" class="control-label"></label>
-                <input asp-for="MovieId" class="form-control" />
-                <span asp-validation-for="MovieId" class="text-danger"></span>
+                <label asp-for="MovieShows.MovieId" class="control-label"></label>
+                <input asp-for="MovieShows.MovieId" class="form-control" />
+                <span asp-validation-for="MovieShows.MovieId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Start" class="control-label"></label>
-                <input asp-for="Start" class="form-control" />
-                <span asp-validation-for="Start" class="text-danger"></span>
+                <label asp-for="MovieShows.Start" class="control-label"></label>
+                <input asp-for="MovieShows.Start" class="form-control" />
+                <span asp-validation-for="MovieShows.Start" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+
+
+
+    </div>
+    <div class="col-md-4 spacing-right">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Movie ID</th>
+                    <th>Movie Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var movie in Model.Movies)
+                {
+                    <tr>
+                        <td>@movie.MovieId</td>
+                        <td>@movie.Title</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-2 spacing-right">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Hall ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var hall in Model.Halls)
+                {
+                    <tr>
+                        <td>@hall.HallId . cinema hall</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 

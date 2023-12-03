@@ -7,6 +7,7 @@ using MovieTicketReservation.Models;
 using MovieTicketReservation.Services;
 using System.Diagnostics;
 using System.Linq;
+using MovieTicketReservation.ViewModels;
 
 namespace MovieTicketReservation.Controllers
 {

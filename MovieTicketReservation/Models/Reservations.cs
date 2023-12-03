@@ -7,7 +7,8 @@ namespace MovieTicketReservation.Models
     public enum State
     {
         RESERVED,
-        TOOKOVER
+        PURCHAUSED,
+        EXPIRED
     }
     public class Reservations
     {

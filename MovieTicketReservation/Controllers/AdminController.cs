@@ -5,6 +5,7 @@ using MovieTicketReservation.Areas.Identity.Data;
 using MovieTicketReservation.Models;
 using MovieTicketReservation.Services;
 using System.Data;
+using MovieTicketReservation.ViewModels;
 
 namespace MovieTicketReservation.Controllers
 {
@@ -51,9 +52,13 @@ namespace MovieTicketReservation.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult AddShows()
         {
+            var viewModel = new EditShowsAndDisplayMoviesViewModel
+            { 
+                Movies = moviecontext.Movies,
+                Halls = moviecontext.Halls
+            };
 
-
-            return View();
+            return View(viewModel);
         }
 
 
@@ -80,8 +85,15 @@ namespace MovieTicketReservation.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult EditShows(int id)
         {
-            var movie = moviecontext.MovieShows.Find(id);
-            return View("EditShows", movie);
+            var movieShows = moviecontext.MovieShows.Find(id);
+            var viewModel = new EditShowsAndDisplayMoviesViewModel
+            {
+                MovieShows = movieShows,
+                Movies = moviecontext.Movies,
+                Halls=moviecontext.Halls
+            };
+
+            return View("EditShows", viewModel);
         }
 
         [HttpPost]
