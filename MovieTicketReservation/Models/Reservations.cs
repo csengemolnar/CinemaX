@@ -18,8 +18,7 @@ namespace MovieTicketReservation.Models
         public int ReservationId { get; set; }
         
         public required DateTime Created { get; set; }
-        [ForeignKey("MovieShows")]
-        public required int MovieShowId { get; set; }
+        
         [ForeignKey("AspNetUsers")]
         public required string UserId { get; set; }
 

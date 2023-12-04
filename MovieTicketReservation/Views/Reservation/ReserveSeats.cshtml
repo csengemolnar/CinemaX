@@ -1,41 +1,70 @@
 ﻿@model MovieTicketReservation.ViewModels.ReserveSeatsViewModel
 
-<h2>@Model.MovieShowStart</h2>
-<h3>Hall: @Model.ReservationId</h3>
+<h2 class ="text-center">@Model.MovieShowStart</h2>
+<h3 class ="text-center">Movie @Model.Title</h3>
 
-<form asp-action="MakeReservation" method="post">
-    <div id="seating-layout">
-        @*@for (int row = 1; row <= Model.Rows; row++)
-        {
-            <div class="seat-row">
-                @foreach (var seat in Model.Seats.Where(s => s.Row == row))
-                {
-                    <button type="button" class="seat @(seat.IsReserved ? "reserved" : "available")"
-                            data-seatid="@seat.SeatId" @(seat.IsReserved ? "disabled" : "")>
-                        @seat.Row-@seat.SeatNumber
-                    </button>
-                }
-            </div>
-        }*@
+<form asp-controller="Reservation" asp-action="ReserveSeats" method="post">
+    <div class="form-group">
+        <label>Select Seat:</label>
+
+        <div class="row">
+            @for (int row = 1; row <= Model.HallRows; row++)
+            {
+                <br></br>
+                <h5>Row @row:</h5>
+                <br></br>
+                <div class="row">
+                    @for (int seat = 1; seat <= Model.HallCapacity; seat++)
+                    {
+                        if (seat <= 10) // Display only 10 seats per row
+                        {
+                            // Calculate the actual seat number
+                            int actualSeatNumber = (row - 1) * 10 + seat;
+
+                            <div class="col-md-1">
+                                <input type="checkbox" id="@($"Seat-{actualSeatNumber}")" name="Seats" value="@actualSeatNumber"  />
+                                <label for="@($"Seat-{actualSeatNumber}")">Seat @actualSeatNumber</label>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+
     </div>
 
-    <input type="hidden" name="SelectedSeats" id="SelectedSeats" />
-    <button type="submit">Reserve Selected Seats</button>
+    
+
+
+    <input type="hidden" name="Created" value="@DateTime.Now" />
+    <input type="hidden" name="MovieShowId" value="@Model.MovieShowId" />
+    <input type="hidden" name="Price" value="4" />
+    
+
+    <button type="submit" class="btn btn-primary">Reserve Seats</button>
+    <div>
+        <span id="ticketPrice"></span>
+    </div>
 </form>
 
+
 <script>
-    document.querySelectorAll('.seat.available').forEach(function (seat) {
-        seat.addEventListener('click', function () {
-            this.classList.toggle('selected');
-            updateSelectedSeats();
+    // Function to calculate and update the displayed price
+    function updatePrice() {
+        var totalPrice = 0;
+        // Loop through all checked checkboxes
+        $("input[name='Seats']:checked").each(function () {
+            totalPrice += 4;
         });
+        // Update the displayed price
+        $("#ticketPrice").text("Total Price: $" + totalPrice.toString() );
+    }
+
+    // Attach an event listener to the checkboxes
+    $("input[name='Seats']").change(function () {
+        updatePrice();
     });
 
-    function updateSelectedSeats() {
-        var selectedSeats = [];
-        document.querySelectorAll('.seat.selected').forEach(function (seat) {
-            selectedSeats.push(seat.getAttribute('data-seatid'));
-        });
-        document.getElementById('SelectedSeats').value = selectedSeats.join(',');
-    }
+    
+    updatePrice();
 </script>

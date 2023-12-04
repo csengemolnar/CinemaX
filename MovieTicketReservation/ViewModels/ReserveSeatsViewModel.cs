@@ -7,7 +7,7 @@ namespace MovieTicketReservation.ViewModels
     {
         public int SeatReservationId { get; set; }
         public int ReservationId { get; set; }
-        public int SeatId { get; set; }
+        public int Seat { get; set; }
         public int MovieShowId { get; set; }
         public int Price { get; set; }
         public DateTime MovieShowDate { get; set; }
@@ -15,5 +15,10 @@ namespace MovieTicketReservation.ViewModels
         public int HallCapacity { get; set; }
         public int HallRows { get; set; }
         public string? Title { get; set; }
+        
+
     }
+
+
+
 }

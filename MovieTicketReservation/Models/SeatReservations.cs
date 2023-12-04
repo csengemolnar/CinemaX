@@ -11,7 +11,7 @@ namespace MovieTicketReservation.Models
         [ForeignKey("Reservation")]
         public required int ReservationId { get; set; }
         
-        public required int SeatId { get; set; }
+        public required int Seat { get; set; }
 
         [ForeignKey("MovieShows")]
         public required int MovieShowId { get; set; }
