@@ -34,7 +34,7 @@ img.logo {
     display: none; /* Hide the actual checkbox */
 }
 
-label {
+#seatcheck {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -62,13 +62,4 @@ label {
     cursor: not-allowed !important;
     pointer-events: none; 
 }
-div.p-3 mb-2 bg-dark text-white
-{
-    text-align:center
-}
-form{
 
-    display: block;
-    margin-left: auto;
-    margin-right: auto
-}

@@ -3,59 +3,53 @@
 <h2 class ="text-center">@Model.MovieShowStart</h2>
 <h3 class ="text-center">Movie @Model.Title</h3>
 
-<div class="p-3 mb-2 bg-dark text-white">Screen</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="p-3 mb-2 bg-dark text-white text-center">Screen</div>
 
-<div class="row justify-content-center align-items-center">
-    <form asp-controller="Reservation" asp-action="ReserveSeats" method="post">
-        <div class="form-group">
-            <h5>Select a seat</h5>
+            <form asp-controller="Reservation" asp-action="ReserveSeats" method="post">
+                <div class="form-group">
+                    <h5>Select a seat</h5>
 
-            <div class="row">
-                @for (int row = 1; row <= Model.HallRows; row++)
-                {
-                    <br></br>
-                    <h5>Row @row:</h5>
-                    <br></br>
-                    <div class="row">
-                        @for (int seat = 1; seat <= Model.HallCapacity; seat++)
-                        {
-                            if (seat <= 10)
+                    @for (int row = 1; row <= Model.HallRows; row++)
+                    {
+                        <div class="row justify-content-center">
+                            <h5>Row @row:</h5>
+                            @for (int seat = 1; seat <= Model.HallCapacity; seat++)
                             {
+                                if (seat <= 10) 
+                                {
+                                    int actualSeatNumber = (row - 1) * 10 + seat;
+                                    bool isReserved = Model.ReservedSeats.Contains(actualSeatNumber);
 
-                                int actualSeatNumber = (row - 1) * 10 + seat;
-                                bool isReserved = Model.ReservedSeats.Contains(actualSeatNumber);
-
-
-
-                                <div class="col-md-1">
-                                    <input type="checkbox" id="@($"Seat-{actualSeatNumber}")" name="Seats" value="@actualSeatNumber"
-                                    @(isReserved ? "disabled" : "") class="custom-checkbox" />
-                                    <label for="@($"Seat-{actualSeatNumber}")" class="@(isReserved ? "reserved-seat" : "")"></label>
-                                    Seat @actualSeatNumber
-                                </div>
+                                    <div class="col-auto">
+                                        <input type="checkbox" id="@($"Seat-{actualSeatNumber}")" name="Seats" value="@actualSeatNumber"
+                                        @(isReserved ? "disabled" : "") class="custom-checkbox" />
+                                        <label id ="seatcheck" for="@($"Seat-{actualSeatNumber}")" class="@(isReserved ? "reserved-seat" : "")"></label>
+                                        Seat @actualSeatNumber
+                                    </div>
+                                }
                             }
+                        </div>
+                    }
+                </div>
 
-                        }
+                <input type="hidden" name="Created" value="@DateTime.Now" />
+                <input type="hidden" name="MovieShowId" value="@Model.MovieShowId" />
+                
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" style="margin-top:20px">Reserve Seats</button>
+                    <div>
+                        <span id="ticketPrice"></span>
                     </div>
-                }
-            </div>
-
+                </div>
+            </form>
         </div>
-
-
-
-
-        <input type="hidden" name="Created" value="@DateTime.Now" />
-        <input type="hidden" name="MovieShowId" value="@Model.MovieShowId" />
-        <input type="hidden" name="Price" value="4" />
-
-
-        <button type="submit" class="btn btn-primary">Reserve Seats</button>
-        <div>
-            <span id="ticketPrice"></span>
-        </div>
-    </form>
+    </div>
 </div>
+
 
 
 
@@ -87,7 +81,8 @@
             url: '@Url.Action("ReserveSeats", "Reservation")',
             data: formData,
             success: function (response) {
-                
+
+                window.location.href = '@Url.Action("Index", "Home")';
                 console.log(response);
             },
             error: function (xhr, status, error) {

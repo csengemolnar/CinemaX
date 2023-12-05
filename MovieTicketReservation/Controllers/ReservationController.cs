@@ -84,6 +84,7 @@ namespace MovieTicketReservation.Controllers
 
             return View("ReserveSeats", movieShowInfo);
         }
+
         [Authorize]
         [HttpGet]
         private IActionResult StartReservation(int movieShowId)
@@ -151,7 +152,36 @@ namespace MovieTicketReservation.Controllers
                 this._logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
-            return View("Index");
+            return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult ListReservation()
+        {
+            string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+            var query = from m1 in moviecontext.SeatReservations
+                        join m2 in moviecontext.MovieShows on m1.MovieShowId equals m2.MovieShowId
+                        join m3 in moviecontext.Movies on m2.MovieId equals m3.MovieId
+                        join m4 in moviecontext.Reservations on m1.ReservationId equals m4.ReservationId
+                        where userId == m4.UserId
+                        select new UserReservationsViewModel
+                        {
+                            ReservationDate = m4.Created,
+                            MovieTitle = m3.Title,
+                            ShowDate = m2.Start,
+                            Hall = m2.HallId,
+                            ReservedSeat = m1.Seat,
+                            Price = m1.Price,
+                            CurrentState = m4.CurrentState
+                        };
+            var queryList = query.ToList();
+
+
+
+            return View("ListReservation", queryList);
         }
     }
 }

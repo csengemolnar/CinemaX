@@ -10,6 +10,7 @@ namespace MovieTicketReservation.ViewModels
         public int Seat { get; set; }
         public int MovieShowId { get; set; }
         public int Price { get; set; }
+        //kihagyható , át kell alakítani a db-t
         public DateTime MovieShowDate { get; set; }
         public DateTime MovieShowStart { get; set; }
         public int HallCapacity { get; set; }

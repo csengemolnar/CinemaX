@@ -1,0 +1,61 @@
+﻿@model List<MovieTicketReservation.ViewModels.UserReservationsViewModel>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Reservation Date</th>
+                <th>Movie Title</th>
+                <th>Show Date</th>
+                <th>Hall</th>
+                <th>Reserved Seat</th>
+                <th>Price</th>
+                <th>Current State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model)
+            {
+                <tr>
+                    <td>@group.ReservationDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@group.MovieTitle</td>
+                    <td>@group.ShowDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@group.Hall</td>
+                    <td>@group.ReservedSeat</td>
+                    <td>@group.Price</td>
+                    <td>@group.CurrentState</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <a asp-controller="Home" asp-action="Index">Back to the Homepage</a>
+    </div>
+
+}
+else
+{
+    <h2 class="text-center">
+        <div class="alert alert-info" role="alert">
+            <h3 class="alert-heading">No Reservations Found</h3>
+            <p>You currently don't have any reservations. When you make a reservation, it will appear here.</p>
+            <hr>
+            <p class="mb-0">Browse movies and reserve your seats to enjoy an amazing movie experience!</p>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary mt-3">Browse Movies</a>
+        </div>
+    </h2>
+}
+
+
+
+
+@section Scripts {
+    @{
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+
