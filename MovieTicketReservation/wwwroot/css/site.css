@@ -30,3 +30,45 @@ img.logo {
 .spacing-right {
     margin-right: 30px;
 }
+.custom-checkbox {
+    display: none; /* Hide the actual checkbox */
+}
+
+label {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 2px solid #000;
+    position: relative;
+    cursor: pointer;
+    margin-right: 5px; /* Adjust as needed */
+}
+
+/* Style for when the checkbox is checked */
+.custom-checkbox:checked + label::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    background-color: green; 
+    transform: translate(-50%, -50%);
+}
+
+.reserved-seat {
+    background-color: red !important;
+    cursor: not-allowed !important;
+    pointer-events: none; 
+}
+div.p-3 mb-2 bg-dark text-white
+{
+    text-align:center
+}
+form{
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}

@@ -15,7 +15,12 @@ namespace MovieTicketReservation.ViewModels
         public int HallCapacity { get; set; }
         public int HallRows { get; set; }
         public string? Title { get; set; }
-        
+        public List<int> ReservedSeats { get; set; }
+
+        public ReserveSeatsViewModel()
+        {
+            ReservedSeats = new List<int>();
+        }
 
     }
 

@@ -39,7 +39,13 @@ namespace MovieTicketReservation.Controllers
         [HttpGet]
         public IActionResult ReserveSeats(int movieShowId)
         {
-            var movieShow = moviecontext.MovieShows.Find(movieShowId);
+            
+
+            var reservedSeats = moviecontext.SeatReservations
+                          .Where(sr => sr.MovieShowId == movieShowId)
+                          .Select(sr => sr.Seat)
+                          .ToList();
+
 
             var movieShowInfo = (from seatRes in moviecontext.SeatReservations
                                  join movieShowData in moviecontext.MovieShows on seatRes.MovieShowId equals movieShowData.MovieShowId
@@ -51,16 +57,22 @@ namespace MovieTicketReservation.Controllers
                                      SeatReservationId = seatRes.SeatReservationId,
                                      ReservationId = seatRes.ReservationId,
                                      Seat = seatRes.Seat,
-                                     MovieShowId = seatRes.MovieShowId,
+                                     MovieShowId = movieShowData.MovieShowId,
                                      Price = seatRes.Price,
                                      MovieShowDate = movieShowData.Date,
                                      MovieShowStart = movieShowData.Start,
                                      HallCapacity = hall.Capacity,
                                      HallRows = hall.Rows,
                                      Title = movie.Title,
-                             
+                                     ReservedSeats = reservedSeats
 
-                                 }).FirstOrDefault(); 
+
+
+                                 }).FirstOrDefault();
+
+
+
+
 
             if (movieShowInfo == null)
             {
@@ -69,12 +81,15 @@ namespace MovieTicketReservation.Controllers
 
             }
 
+
             return View("ReserveSeats", movieShowInfo);
         }
         [Authorize]
         [HttpGet]
         private IActionResult StartReservation(int movieShowId)
         {
+
+
             var movieShowEmpty = (from movieShowData in moviecontext.MovieShows
                                   join hall in moviecontext.Halls on movieShowData.HallId equals hall.HallId
                                   join movie in moviecontext.Movies on movieShowData.MovieId equals movie.MovieId
@@ -90,18 +105,21 @@ namespace MovieTicketReservation.Controllers
 
                                   }).FirstOrDefault();
 
+            
+
             return View("ReserveSeats", movieShowEmpty);
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult ReserveSeats(CheckedInSeatsViewModel model)
+        public IActionResult ReserveSeats(IFormCollection form)
         {
             try
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var created = Request.Form["Created"];
                 var movieShowId = Request.Form["MovieShowId"];
+                var selectedSeats = form["Seats"];
 
                 var reservation = new Reservations() { Created = DateTime.Parse(created), UserId = userId };
 
@@ -110,14 +128,13 @@ namespace MovieTicketReservation.Controllers
 
                 //itt hozom létre a seatreservationokat amik egy reservationhoz(user) tartoznak
                 int reservationId = reservation.ReservationId;
-                List<int> selectedSeats = model.SelectedSeats;
 
-                foreach (var seatNumber in model.SelectedSeats)
+                foreach (var seatNumber in selectedSeats)
                 {
                     var seatres = new SeatReservations
                     {
                         ReservationId = reservationId,
-                        Seat = seatNumber,
+                        Seat = int.Parse(seatNumber),
                         MovieShowId = int.Parse(movieShowId),
                         Price = 4
 
@@ -125,8 +142,7 @@ namespace MovieTicketReservation.Controllers
                     moviecontext.SeatReservations.Add(seatres);
                     moviecontext.SaveChanges();
                 }
-                // elküldeni a frontendnek a moviecontext-et
-                int J = 3;
+
 
             }
             catch (Exception ex)
@@ -135,7 +151,7 @@ namespace MovieTicketReservation.Controllers
                 this._logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
-            return RedirectToAction();
+            return View("Index");
         }
     }
 }
