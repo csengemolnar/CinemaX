@@ -2,9 +2,21 @@
 
 @if (Model.Any())
 {
+    <div>
+        <form asp-action="FilterReservation" method="get">
+            <div class="form-group">
+                <label for="reservationId">Filter by Reservation ID:</label>
+                <input type="text" name="reservationId" class="col-xs-2" />
+                <input type="submit" value="Filter" class="btn btn-primary" />
+                <a href="/Reservation/ListReservation" class="btn btn-secondary">Remove</a>
+            </div>
+        </form>
+    </div>
+    
     <table class="table">
         <thead>
             <tr>
+                <th>Reservation ID</th>
                 <th>Reservation Date</th>
                 <th>Movie Title</th>
                 <th>Show Date</th>
@@ -18,6 +30,7 @@
             @foreach (var group in Model)
             {
                 <tr>
+                    <td>@group.ReservationId</td>
                     <td>@group.ReservationDate.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>@group.MovieTitle</td>
                     <td>@group.ShowDate.ToString("yyyy-MM-dd HH:mm")</td>
@@ -25,6 +38,7 @@
                     <td>@group.ReservedSeat</td>
                     <td>@group.Price</td>
                     <td>@group.CurrentState</td>
+                    <td><div>@Html.ActionLink("Delete", "Delete", new{id=group.SeatReservationId}, new{@class = "btn btn-danger", @style="color:white"})</div></td>
                 </tr>
 
             }

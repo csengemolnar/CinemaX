@@ -143,6 +143,8 @@ namespace MovieTicketReservation.Controllers
                     moviecontext.SeatReservations.Add(seatres);
                     moviecontext.SaveChanges();
                 }
+                return Json(new { success = true, ReservationId = reservationId });
+
 
 
             }
@@ -150,9 +152,41 @@ namespace MovieTicketReservation.Controllers
             {
 
                 this._logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
+                return Json(new { success = false, message = ex.Message });
+
             }
-            return RedirectToAction("Index", "Home");
+            
+
+            //return RedirectToAction("Index", "Home");
+        }
+        [Authorize]
+        [HttpGet]
+        public IActionResult FilterReservation(int reservationId)
+        {
+            string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var query = from m1 in moviecontext.SeatReservations
+                        join m2 in moviecontext.MovieShows on m1.MovieShowId equals m2.MovieShowId
+                        join m3 in moviecontext.Movies on m2.MovieId equals m3.MovieId
+                        join m4 in moviecontext.Reservations on m1.ReservationId equals m4.ReservationId
+                        where userId == m4.UserId && m4.ReservationId == reservationId
+                        select new UserReservationsViewModel
+                        {
+                            ReservationId=m1.ReservationId,
+                            SeatReservationId = m1.SeatReservationId,
+                            ReservationDate = m4.Created,
+                            MovieTitle = m3.Title,
+                            ShowDate = m2.Start,
+                            Hall = m2.HallId,
+                            ReservedSeat = m1.Seat,
+                            Price = m1.Price,
+                            CurrentState = m4.CurrentState
+                        };
+
+            var queryList = query.ToList();
+
+
+            return View("ListReservation", queryList);
         }
 
         [Authorize]
@@ -169,6 +203,8 @@ namespace MovieTicketReservation.Controllers
                         where userId == m4.UserId
                         select new UserReservationsViewModel
                         {
+                            ReservationId = m1.ReservationId,
+                            SeatReservationId =m1.SeatReservationId,
                             ReservationDate = m4.Created,
                             MovieTitle = m3.Title,
                             ShowDate = m2.Start,
@@ -183,6 +219,59 @@ namespace MovieTicketReservation.Controllers
 
             return View("ListReservation", queryList);
         }
+
+
+        public IActionResult Delete(int id)
+        {
+
+            var query = (from m1 in moviecontext.SeatReservations
+                         join m2 in moviecontext.Reservations on m1.ReservationId equals m2.ReservationId
+                         where id == m1.SeatReservationId
+                         select new AllReservationsViewModel
+                         {
+                             ReservationId = m2.ReservationId,
+                             SeatReservationId = m1.SeatReservationId,
+                             CurrentState = m2.CurrentState
+
+                         }).FirstOrDefault();
+
+            if (query != null && query.CurrentState == "RESERVED")
+            {
+                var seatReservation = moviecontext.SeatReservations.Find(id);
+                if (seatReservation != null)
+                {
+                    moviecontext.SeatReservations.Remove(seatReservation);
+                    moviecontext.SaveChanges();
+                    var remainingSeatReservations = moviecontext.SeatReservations
+                                                   .Where(sr => sr.ReservationId == seatReservation.ReservationId)
+                                                    .ToList();
+
+                    if (!remainingSeatReservations.Any())
+                    {
+
+                        var reservation = moviecontext.Reservations.Find(seatReservation.ReservationId);
+                        if (reservation != null)
+                        {
+                            moviecontext.Reservations.Remove(reservation);
+                            moviecontext.SaveChanges();
+                        }
+
+
+
+                    }
+                    return RedirectToAction("ListReservation");
+
+                }
+
+
+            }
+
+            return BadRequest("Delete can't be executed!");
+
+
+        }
+
+        
     }
 }
 

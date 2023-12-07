@@ -1,0 +1,97 @@
+﻿@model List<MovieTicketReservation.ViewModels.AllReservationsViewModel>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Reservation ID</th>
+                <th>Reserver Email</th>
+                <th>Movie Title</th>
+                <th>Show Date</th>
+                <th>Hall</th>
+                <th>Reserved Seats</th>
+                <th>Price</th>
+                <th>Current State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model)
+            {
+                <tr>
+                    <td>@group.ReservationId</td>
+                    <td>@group.ReserverEmail</td>
+                    <td>@group.MovieTitle</td>
+                    <td>@group.ShowDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@group.Hall</td>
+                    <td>
+                    @foreach (var seat in @group.Seats)
+                    {
+                        <text>@seat.ReservedSeat. </text>
+                    }
+                    </td>
+                    <td>@group.Price</td>
+
+                    @if (@group.CurrentState=="PURCHASED")
+                    {
+                        <td class="p-3 mb-2 bg-success text-white text-center status-display" data-reservation-id="@group.ReservationId">@group.CurrentState</td>
+                        
+                    }
+                    else
+                    {
+                        <td class="p-3 mb-2 bg-info text-white text-center status-display" data-reservation-id="@group.ReservationId">@group.CurrentState</td>
+                        <td><button type="button" class="btn btn-secondary update-status-btn" data-reservation-id="@group.ReservationId">Confirm Purchase</button></td>
+                        
+                    }
+                   
+                    @*<td><button type="button" class="btn btn-secondary update-status-btn" data-reservation-id="@group.ReservationId">Confirm Purchase</button></td>*@
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <a asp-controller="Home" asp-action="Index">Back to the Homepage</a>
+    </div>
+   
+}
+
+
+
+
+@section Scripts {
+    @{
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+<script>
+    $(document).ready(function () {
+        $('.update-status-btn').click(function () {
+            var ReservationId = $(this).data('reservation-id');
+            var statusCell = $('.status-display[data-reservation-id="' + ReservationId + '"]');
+            var buttonCell = $('.update-status-btn[data-reservation-id="' + ReservationId + '"]');
+
+            $.ajax({
+                url: '@Url.Action("UpdateStatus", "Admin")',
+                type: 'POST',
+                data: { reservationId: ReservationId },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Reservation status updated successfully');
+                        var statusCell = $('.status-display[data-reservation-id="' + ReservationId + '"]');
+                        statusCell.text('PURCHASED');
+                        statusCell.removeClass('p-3 mb-2 bg-info text-white text-center status-display').addClass('p-3 mb-2 bg-success text-white text-center status-display');
+                        buttonCell.hide();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error updating reservation status');
+                }
+            });
+        });
+    });
+</script>

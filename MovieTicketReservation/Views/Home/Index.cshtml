@@ -17,32 +17,39 @@
 
 @foreach (var movie in Model)
 {
-    <div>
-        <script>
-            console.log("Generated Image Path: @Url.Content("~/" + movie.ThumbNail)");
-        </script>
-
-
-        <div><img src="@Url.Content("~/" + movie.ThumbNail)" alt="Movie Thumbnail" /></div>
-        <div>@movie.Title</div>
-        <div>@movie.MovieLength mins</div>
-        <div>Genre: @movie.Genre</div>
-        <div>Stars: @movie.Actors</div>
-        <div> Release date: @movie.ReleaseDate.ToString("yyyy-MM-dd") </div>
-        <div>Director: @movie.Director</div>
-        <div>@movie.Description</div>
-
-        <div class="row">
-            <div class="col"></div>
-            <div class="col-auto">
-                <div>@Html.ActionLink("Screenings", "Screenings", new{movieId=movie.MovieId}, new{@class = "btn btn-warning", @style="color:black"})</div>
-
-            </div>
+    <div class="row mb-3">
+        <!-- Movie Image -->
+        <div class="col-md-4">
+            <img src="@Url.Content("~/" + movie.ThumbNail)" alt="Movie Thumbnail" class="img-fluid" />
         </div>
 
+        <!-- Movie Data -->
+        <div class="col-md-8">
+            <div><strong>@movie.Title</strong></div>
+            <div>@movie.MovieLength mins</div>
+            <div>Genre: @movie.Genre</div>
+            <div>Stars: @movie.Actors</div>
+            <div>Release date: @movie.ReleaseDate.ToString("yyyy-MM-dd")</div>
+            <div>Director: @movie.Director</div>
+            <div>@movie.Description</div>
+
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-auto">
+                    <div style="margin-top:100px">
+                        @Html.ActionLink("Screenings", "Screenings", new { movieId = movie.MovieId }, new { @class = "btn btn-warning", @style = "color:black" })
+
+                    </div>
+                </div>
+            </div>
+
+            
+            
+        </div>
     </div>
     <hr />
-
 }
+
+
 
 

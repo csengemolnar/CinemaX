@@ -6,6 +6,9 @@ using MovieTicketReservation.Models;
 using MovieTicketReservation.Services;
 using System.Data;
 using MovieTicketReservation.ViewModels;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieTicketReservation.Controllers
 {
@@ -160,7 +163,72 @@ namespace MovieTicketReservation.Controllers
             moviecontext.SaveChanges();
             return RedirectToAction("EditMovies");
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditReservations()
+        {
+
+
+            var query = from m1 in moviecontext.SeatReservations
+                        join m2 in moviecontext.MovieShows on m1.MovieShowId equals m2.MovieShowId
+                        join m3 in moviecontext.Movies on m2.MovieId equals m3.MovieId
+                        join m4 in moviecontext.Reservations on m1.ReservationId equals m4.ReservationId
+                        join m5 in moviecontext.Users on m4.UserId equals m5.Id
+                        group m1 by new
+                        {
+                            m4.ReservationId,
+                            m5.Email,
+                            m3.Title,
+                            m2.Start,
+                            m2.HallId,
+                            m4.CurrentState
+                        } into grouped
+                        select new AllReservationsViewModel
+                        {
+                            ReservationId = grouped.Key.ReservationId,
+                            ReserverEmail = grouped.Key.Email,
+                            MovieTitle = grouped.Key.Title,
+                            ShowDate = grouped.Key.Start,
+                            Hall = grouped.Key.HallId,
+                            Seats = grouped.Select(g => new SeatReservationInfo
+                            {
+                                SeatReservationId = g.SeatReservationId,
+                                ReservedSeat = g.Seat
+                                
+                            }).ToList(),
+                            Price = grouped.Sum(g => g.Price), 
+                            CurrentState = grouped.Key.CurrentState
+                        };
+
+            var queryList = query.ToList();
+
+            return View("EditReservation", queryList);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult UpdateStatus(int reservationId)
+        {
+            var reservationToUpdate = moviecontext.Reservations
+                                            .FirstOrDefault(r => r.ReservationId == reservationId);
+
+            if (reservationToUpdate != null)
+            {
+
+                reservationToUpdate.CurrentState = Enum.GetName(typeof(State), State.PURCHASED);
+
+                moviecontext.SaveChanges();
+
+                return Json(new { success = true, message = "Status updated successfully" });
+
+            }
+
+            return Json(new { success = false, message = "Reservation not found" });
+        }
     }
 
-    
+
+
+
 }

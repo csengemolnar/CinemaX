@@ -1,5 +1,7 @@
 ﻿@model MovieTicketReservation.ViewModels.ReserveSeatsViewModel
 
+
+
 <h2 class ="text-center">@Model.MovieShowStart</h2>
 <h3 class ="text-center">Movie @Model.Title</h3>
 
@@ -50,6 +52,28 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog"
+     aria-labelledby="reservationModalLabel" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reservationModalLabel">Reservation Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="reservationMessage"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 
 
@@ -70,33 +94,47 @@
         updatePrice();
     });
 
+
+    function showModal(message) {
+        $('#reservationMessage').text(message);
+        $('#reservationModal').modal('show');
+    }
+
     
-    $("form").submit(function (event) {
-        event.preventDefault(); 
+    $("#closebtn").click(function () {
+        $("#reservationModal").modal('hide');
+        window.location.href = '@Url.Action("Index", "Home")';
+    });
 
-        var formData = $(this).serialize();
+    
+    $(document).ready(function () {
+        $("form").submit(function (event) {
+            event.preventDefault();
 
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("ReserveSeats", "Reservation")',
-            data: formData,
-            success: function (response) {
+            var formData = $(this).serialize();
+            
 
-                window.location.href = '@Url.Action("Index", "Home")';
-                console.log(response);
-            },
-            error: function (xhr, status, error) {
-                
-                console.error(error);
-            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ReserveSeats", "Reservation")',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        var reservationId = response.reservationId;
+                        showModal('Reservation successful! \n Your Reservation Id: ' + reservationId);
+                        setTimeout(function () {
+                            window.location.href = '@Url.Action("Index", "Home")';
+                        }, 2500);
+                    } else {
+                        showModal('Something went wrong! \n Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showModal('Something went wrong! \n Error: ' + error);
+                }
+            });
         });
     });
-
-    
-    $("input[name='selectedSeats']").change(function () {
-        updatePrice();
-    });
-
     
     updatePrice();
 
