@@ -259,14 +259,17 @@ namespace MovieTicketReservation.Controllers
 
 
                     }
+                    TempData["SuccessMessage"] = "Success! The item has been successfully deleted. ";
                     return RedirectToAction("ListReservation");
 
                 }
 
 
             }
+            TempData["ErrorMessage"] = "Delete can't be executed! If you have already purchased your ticket, you are unable to delete it!";
+            return RedirectToAction("ListReservation");
 
-            return BadRequest("Delete can't be executed!");
+            
 
 
         }

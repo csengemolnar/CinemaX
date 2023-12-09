@@ -34,6 +34,8 @@ namespace MovieTicketReservation.Controllers
             _csvService.ImportHallsFromCsv("CsvFiles/halls.csv");
             _csvService.ImportMovieShowsFromCsv("CsvFiles/movieShows.csv");
 
+            
+
             return View(moviecontext.Movies.ToList());
         }
 

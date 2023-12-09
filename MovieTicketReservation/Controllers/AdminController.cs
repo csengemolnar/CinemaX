@@ -168,8 +168,6 @@ namespace MovieTicketReservation.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult EditReservations()
         {
-
-
             var query = from m1 in moviecontext.SeatReservations
                         join m2 in moviecontext.MovieShows on m1.MovieShowId equals m2.MovieShowId
                         join m3 in moviecontext.Movies on m2.MovieId equals m3.MovieId
@@ -201,6 +199,7 @@ namespace MovieTicketReservation.Controllers
                             CurrentState = grouped.Key.CurrentState
                         };
 
+
             var queryList = query.ToList();
 
             return View("EditReservation", queryList);
@@ -226,9 +225,60 @@ namespace MovieTicketReservation.Controllers
 
             return Json(new { success = false, message = "Reservation not found" });
         }
+
+        //STATISTICS
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult ScreeningStatistics()
+        {
+            return View("ScreeningStatistics");           
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult ScreeningStatistics([FromBody] ScreeningStatisticsViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            
+            DateTime startDate = model.StartDate;
+            DateTime endDate = model.EndDate;
+
+            var DataAggregatorService = new DataAggregatorService(moviecontext);
+            var screeningsData = DataAggregatorService.GetScreeningsCount(startDate, endDate);
+            var formattedData = screeningsData.Select(kvp => new
+            {
+                name = kvp.Key,
+                y = kvp.Value
+
+            }).ToList();
+
+            return Json(formattedData);
+        }
+
+        //VIEWERSHIP TRENDS LINE CHART
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult ViewershipTrends()
+        {
+            return View("ViewershipTrends", moviecontext.Movies.ToList());
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult ViewershipTrends([FromBody] ViewershipViewModel model)
+        {
+            var DataAggregatorService = new DataAggregatorService(moviecontext);
+            var screeningsData = DataAggregatorService.GetScreeningsByDate(model.MovieId, model.StartDate, model.EndDate);
+            var formattedData = screeningsData.Select(kvp => new
+            {
+                name = kvp.Key,
+                y = kvp.Value
+
+            }).ToList();
+
+            return Json(formattedData);
+        }
     }
-
-
-
-
 }

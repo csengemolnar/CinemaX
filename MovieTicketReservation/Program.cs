@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using MovieTicketReservation.Areas.Identity.Data;
+using MovieTicketReservation.Models;
 using MovieTicketReservation.Services;
 
 
@@ -26,7 +27,9 @@ namespace MovieTicketReservation
 
             builder.Services.AddScoped<CSVService>();
             builder.Services.AddControllersWithViews();
-            
+            builder.Services.AddScoped<TableTransformerService>();
+
+
 
             var app = builder.Build();
 
@@ -95,7 +98,20 @@ namespace MovieTicketReservation
 
             }
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+               
+
+                var tableTransformerService = services.GetRequiredService<TableTransformerService>();
+                await tableTransformerService.updateReservationStatusExpired();
+
+                
+            }
             app.Run();
+            
         }
+
     }
 }

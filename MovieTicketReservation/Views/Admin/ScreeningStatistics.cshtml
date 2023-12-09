@@ -1,0 +1,27 @@
+﻿
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+<div>Enter the dates</div>
+<form asp-action="ScreeningStatistics" id="dateForm" method="post">
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="StartDate"> 
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="EndDate"> 
+
+    <button type="submit">Submit</button>
+</form>
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+</figure>
+
+<link href="~/css/chart.css" rel="stylesheet" />
+<script src="~/js/chart.js"></script>
+

@@ -5,72 +5,88 @@
 <h2 class ="text-center">@Model.MovieShowStart</h2>
 <h3 class ="text-center">Movie @Model.Title</h3>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="p-3 mb-2 bg-dark text-white text-center">Screen</div>
+@if (Model.MovieShowStart.AddMinutes(-30) >= DateTime.Now)
+{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="p-3 mb-2 bg-dark text-white text-center">Screen</div>
 
-            <form asp-controller="Reservation" asp-action="ReserveSeats" method="post">
-                <div class="form-group">
-                    <h5>Select a seat</h5>
+                <form asp-controller="Reservation" asp-action="ReserveSeats" method="post">
+                    <div class="form-group">
+                        <h5>Select a seat</h5>
 
-                    @for (int row = 1; row <= Model.HallRows; row++)
-                    {
-                        <div class="row justify-content-center">
-                            <h5>Row @row:</h5>
-                            @for (int seat = 1; seat <= Model.HallCapacity; seat++)
-                            {
-                                if (seat <= 10) 
+                        @for (int row = 1; row <= Model.HallRows; row++)
+                        {
+                            <div class="row justify-content-center">
+                                <h5>Row @row:</h5>
+                                @for (int seat = 1; seat <= Model.HallCapacity; seat++)
                                 {
-                                    int actualSeatNumber = (row - 1) * 10 + seat;
-                                    bool isReserved = Model.ReservedSeats.Contains(actualSeatNumber);
+                                    if (seat <= 10)
+                                    {
+                                        int actualSeatNumber = (row - 1) * 10 + seat;
+                                        bool isReserved = Model.ReservedSeats.Contains(actualSeatNumber);
 
-                                    <div class="col-auto">
-                                        <input type="checkbox" id="@($"Seat-{actualSeatNumber}")" name="Seats" value="@actualSeatNumber"
-                                        @(isReserved ? "disabled" : "") class="custom-checkbox" />
-                                        <label id ="seatcheck" for="@($"Seat-{actualSeatNumber}")" class="@(isReserved ? "reserved-seat" : "")"></label>
-                                        Seat @actualSeatNumber
-                                    </div>
+                                        <div class="col-auto">
+                                            <input type="checkbox" id="@($"Seat-{actualSeatNumber}")" name="Seats" value="@actualSeatNumber"
+                                            @(isReserved ? "disabled" : "") class="custom-checkbox" />
+                                            <label id="seatcheck" for="@($"Seat-{actualSeatNumber}")" class="@(isReserved ? "reserved-seat" : "")"></label>
+                                            Seat @actualSeatNumber
+                                        </div>
+                                    }
                                 }
-                            }
-                        </div>
-                    }
-                </div>
-
-                <input type="hidden" name="Created" value="@DateTime.Now" />
-                <input type="hidden" name="MovieShowId" value="@Model.MovieShowId" />
-                
-
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary" style="margin-top:20px">Reserve Seats</button>
-                    <div>
-                        <span id="ticketPrice"></span>
+                            </div>
+                        }
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog"
-     aria-labelledby="reservationModalLabel" aria-hidden="true"
-     data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reservationModalLabel">Reservation Status</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="reservationMessage"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
+                    <input type="hidden" name="Created" value="@DateTime.Now" />
+                    <input type="hidden" name="MovieShowId" value="@Model.MovieShowId" />
+
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" style="margin-top:20px">Reserve Seats</button>
+                        <div>
+                            <span id="ticketPrice"></span>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
+
+
+    <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog"
+    aria-labelledby="reservationModalLabel" aria-hidden="true"
+    data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reservationModalLabel">Reservation Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="reservationMessage"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closebtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h2 class="text-center">
+        <div class="alert alert-info" role="alert">
+            <h3 class="alert-heading">The Screening starts soon!</h3>
+            <p>Orders cannot be placed through the application within 30 minutes of the screening start time.</p>
+            <p>Only in-person purchases are available during this period</p>
+            <hr>            
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary mt-3">Back to the Homepage</a>
+        </div>
+    </h2>
+}
+
 
 
 

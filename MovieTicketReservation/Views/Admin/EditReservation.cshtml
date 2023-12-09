@@ -32,9 +32,17 @@
                     </td>
                     <td>@group.Price</td>
 
+
                     @if (@group.CurrentState=="PURCHASED")
                     {
                         <td class="p-3 mb-2 bg-success text-white text-center status-display" data-reservation-id="@group.ReservationId">@group.CurrentState</td>
+
+                    }
+                    else if (@group.CurrentState == "EXPIRED")
+                    {
+                        <td class="p-3 mb-2 bg-warning text-white text-center status-display" data-reservation-id="@group.ReservationId">@group.CurrentState</td>
+
+
                         
                     }
                     else

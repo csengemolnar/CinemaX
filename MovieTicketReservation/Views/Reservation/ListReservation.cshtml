@@ -12,6 +12,15 @@
             </div>
         </form>
     </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger text-center" role="alert">@TempData["ErrorMessage"]</div>
+    }
     
     <table class="table">
         <thead>
@@ -38,12 +47,36 @@
                     <td>@group.ReservedSeat</td>
                     <td>@group.Price</td>
                     <td>@group.CurrentState</td>
-                    <td><div>@Html.ActionLink("Delete", "Delete", new{id=group.SeatReservationId}, new{@class = "btn btn-danger", @style="color:white"})</div></td>
+
+                    
+
+                    @{
+                        bool showStartIn30 = DateTime.Now >= group.ShowDate.AddMinutes(-30);
+                    }
+
+                    @if (showStartIn30 && group.CurrentState=="EXPIRED")
+                    {
+                        <td>
+                            <div>
+                                <a class="btn btn-secondary disabled" style="color:white; pointer-events: none; cursor: default;">
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                        <td><div class="alert alert-warning"> Modification Not Allowed! Less than 30 mins to Show Start!</div></td>
+                    }
+                    else
+                    {
+                        <td><div>@Html.ActionLink("Delete", "Delete", new{id=group.SeatReservationId}, new{@class = "btn btn-danger", @style="color:white"})</div></td>
+
+                    }
+                    
                 </tr>
 
             }
         </tbody>
     </table>
+
 
     <div>
         <a asp-controller="Home" asp-action="Index">Back to the Homepage</a>
@@ -73,3 +106,14 @@ else
     }
     }
 
+
+<script type="text/javascript">
+    window.onload = function () {
+        setTimeout(function () {
+            var alert = document.querySelector('.alert');
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }, 2000); 
+    };
+</script>
