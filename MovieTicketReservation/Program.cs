@@ -28,6 +28,7 @@ namespace MovieTicketReservation
             builder.Services.AddScoped<CSVService>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<TableTransformerService>();
+            builder.Services.AddScoped<CinemaProgramExporterService>();
 
 
 

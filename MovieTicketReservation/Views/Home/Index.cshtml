@@ -6,9 +6,14 @@
     ViewData["Title"] = "Home Page";
 
 }
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center" role="alert">@TempData["SuccessMessage"]</div>
+}
 
-
-
+<form asp-controller="Home" asp-action="ExportCinemaProgram" id="exportForm" method="post">
+    <button type="submit" class="btn btn-link">Export Weekly Program</button>
+</form>
 
 
 <div>
@@ -49,6 +54,8 @@
     </div>
     <hr />
 }
+
+
 
 
 

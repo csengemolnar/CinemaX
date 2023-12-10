@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExportWeeklyProgramViewModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <WeekStarting>2023-12-10T00:00:00+01:00</WeekStarting>
+  <ScreeningsByDay>
+    <ScreeningDay>
+      <Date>2023-12-11T00:00:00</Date>
+      <Screenings>
+        <ScreeningViewModel>
+          <ShowTime>2023-12-11T13:00:00</ShowTime>
+          <Hall>10</Hall>
+          <Title>Pulp Fiction</Title>
+        </ScreeningViewModel>
+      </Screenings>
+    </ScreeningDay>
+  </ScreeningsByDay>
+</ExportWeeklyProgramViewModel>

@@ -1,7 +1,27 @@
 ﻿@model List<MovieTicketReservation.ViewModels.AllReservationsViewModel>
 
+
+
 @if (Model.Any())
 {
+    <div>
+        <form asp-action="FilterReservationByStatus" method="get">
+            <div class="form-group">
+                <label for="currentstatus">Select a Status:</label>
+                <select id="currentstatus" name="currentstatus">
+                    @foreach (var status in Model.Select(s => s.CurrentState).Distinct().Take(3))
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </select>
+                <input type="submit" value="Filter" class="btn btn-primary" />
+                <a href="EditReservations" class="btn btn-secondary">Remove</a>
+            </div>
+        </form>
+    </div>
+
+
+
     <table class="table">
         <thead>
             <tr>
@@ -52,7 +72,7 @@
                         
                     }
                    
-                    @*<td><button type="button" class="btn btn-secondary update-status-btn" data-reservation-id="@group.ReservationId">Confirm Purchase</button></td>*@
+                    
                 </tr>
 
             }
