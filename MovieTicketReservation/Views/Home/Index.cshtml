@@ -6,10 +6,10 @@
     ViewData["Title"] = "Home Page";
 
 }
-@if (TempData["SuccessMessage"] != null)
+@*@if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success text-center" role="alert">@TempData["SuccessMessage"]</div>
-}
+}*@
 
 <form asp-controller="Home" asp-action="ExportCinemaProgram" id="exportForm" method="post">
     <button type="submit" class="btn btn-link">Export Weekly Program</button>
@@ -23,12 +23,13 @@
 @foreach (var movie in Model)
 {
     <div class="row mb-3">
-        <!-- Movie Image -->
+       
         <div class="col-md-4">
-            <img src="@Url.Content("~/" + movie.ThumbNail)" alt="Movie Thumbnail" class="img-fluid" />
+            <img src="@Url.Content("~/" + movie.ThumbNail)" alt="Movie Thumbnail" class="img-fluid" style="width: 230px;
+    height: 350px;" />
         </div>
 
-        <!-- Movie Data -->
+        
         <div class="col-md-8">
             <div><strong>@movie.Title</strong></div>
             <div>@movie.MovieLength mins</div>

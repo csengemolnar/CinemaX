@@ -3,6 +3,15 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center" role="alert">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger text-center" role="alert">@TempData["ErrorMessage"]</div>
+}
+
 <div class="text-center">
     <h1 class="display-4">Edit Movies</h1>
 </div>
@@ -33,3 +42,14 @@
     <hr />
 
 }
+
+<script type="text/javascript">
+    window.onload = function () {
+        setTimeout(function () {
+            var alert = document.querySelector('.alert');
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }, 2000);
+    };
+</script>
